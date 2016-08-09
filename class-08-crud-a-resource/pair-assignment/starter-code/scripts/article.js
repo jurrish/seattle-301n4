@@ -22,7 +22,16 @@
   // TODO: Set up a DB table for articles.
   Article.createTable = function(callback) {
     webDB.execute(
-      '...', // what SQL command do we run here inside these quotes?
+      'CREATE TABLE articles(
+        id INTEGER PRIMARY KEY,
+        title VARCHAR(100) NOT NULL,
+        category VARCHAR(100) NOT NULL,
+        author VARCHAR(100) NOT NULL,
+        authorUrl VARCHAR,
+        publishedOn DATE,
+        body TEXT
+      );', // what SQL command do we run here inside these quotes?
+      //VARCHAR(8000) or TEXT??
       function(result) {
         console.log('Successfully set up the articles table.', result);
         if (callback) callback();
@@ -33,7 +42,7 @@
   // TODO: Use correct SQL syntax to delete all records from the articles table.
   Article.truncateTable = function(callback) {
     webDB.execute(
-      'DELETE ...;', // <----finish the command here, inside the quotes.
+      'DELETE * FROM articles;', // <----finish the command here, inside the quotes.
       callback
     );
   };
@@ -44,8 +53,8 @@
     webDB.execute(
       [
         {
-          'sql': '...;',
-          'data': [],
+          'sql': 'INSERT INTO articles(title, category, author, authorUrl, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?);',
+          'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn, this.body],//working inside the Article (this)
         }
       ],
       callback
@@ -57,7 +66,8 @@
     webDB.execute(
       [
         {
-          /* ... */
+          'sql': 'DELETE FROM articles WHERE id = ?';
+          'data': [this.id];
         }
       ],
       callback
@@ -69,7 +79,8 @@
     webDB.execute(
       [
         {
-          /* ... */
+          'sql': 'UPDATE articles SET (title, category, author, authorUrl, publishedOn, body) VALUES(?, ?, ?, ?, ?, ?) WHERE id = ?;'
+          'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn, this.body, this.id];
         }
       ],
       callback
@@ -86,12 +97,13 @@
   // TODO: Refactor this to check if the database holds any records or not. If the DB is empty,
   // we need to retrieve the JSON and process it.
   // If the DB has data already, we'll load up the data (sorted!), and then hand off control to the View.
-  Article.fetchAll = function() {
-    webDB.execute('', function(rows) { // TODO: fill these quotes to 'select' our table.
+  Article.fetchAll = function(cb) {
+    webDB.execute('SELECT * FROM articles', function(rows) { // TODO: fill these quotes to 'select' our table.
       if (rows.length) {
         // TODO: Now, 1st - instanitate those rows with the .loadAll function,
         // and 2nd - pass control to the view by calling whichever function argument was passed in to fetchAll.
-
+        Article.loadAll(rows);
+        cb();
       } else {
         $.getJSON('/data/hackerIpsum.json', function(rawData) {
           // Cache the json, so we don't need to request it next time:
