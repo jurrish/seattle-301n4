@@ -20,7 +20,7 @@
   };
 
   // TODO: Set up a DB table for articles.
-  Article.createTable = function(callback) {
+  Article.createTable = function(callback) {//callback is passed in because when you call createTable, you could pass in a function that does things...like modify the VIEW (background color, alerts, etc.)  it allows you to have more control over what happens directly after createTable...
     webDB.execute(
       'CREATE TABLE IF NOT EXISTS articles(id INTEGER PRIMARY KEY, title VARCHAR(100) NOT NULL, category VARCHAR(100) NOT NULL, author VARCHAR(100) NOT NULL, authorUrl VARCHAR, publishedOn DATE, body TEXT);', // what SQL command do we run here inside these quotes?
       //VARCHAR(8000) or TEXT??
