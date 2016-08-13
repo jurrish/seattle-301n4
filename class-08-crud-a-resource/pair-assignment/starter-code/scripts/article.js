@@ -22,15 +22,7 @@
   // TODO: Set up a DB table for articles.
   Article.createTable = function(callback) {
     webDB.execute(
-      'CREATE TABLE articles(
-        id INTEGER PRIMARY KEY,
-        title VARCHAR(100) NOT NULL,
-        category VARCHAR(100) NOT NULL,
-        author VARCHAR(100) NOT NULL,
-        authorUrl VARCHAR,
-        publishedOn DATE,
-        body TEXT
-      );', // what SQL command do we run here inside these quotes?
+      'CREATE TABLE IF NOT EXISTS articles(id INTEGER PRIMARY KEY, title VARCHAR(100) NOT NULL, category VARCHAR(100) NOT NULL, author VARCHAR(100) NOT NULL, authorUrl VARCHAR, publishedOn DATE, body TEXT);', // what SQL command do we run here inside these quotes?
       //VARCHAR(8000) or TEXT??
       function(result) {
         console.log('Successfully set up the articles table.', result);
@@ -43,10 +35,9 @@
   Article.truncateTable = function(callback) {
     webDB.execute(
       'DELETE * FROM articles;', // <----finish the command here, inside the quotes.
-      callback
+      callback//why is callback here??
     );
   };
-
 
   // TODO: Insert an article instance into the database:
   Article.prototype.insertRecord = function(callback) {
@@ -66,8 +57,8 @@
     webDB.execute(
       [
         {
-          'sql': 'DELETE FROM articles WHERE id = ?';
-          'data': [this.id];
+          'sql': 'DELETE FROM articles WHERE id = ?;',
+          'data': [this.id]
         }
       ],
       callback
@@ -79,8 +70,8 @@
     webDB.execute(
       [
         {
-          'sql': 'UPDATE articles SET (title, category, author, authorUrl, publishedOn, body) VALUES(?, ?, ?, ?, ?, ?) WHERE id = ?;'
-          'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn, this.body, this.id];
+          'sql': 'UPDATE articles SET (title, category, author, authorUrl, publishedOn, body) VALUES(?, ?, ?, ?, ?, ?) WHERE id = ?;',
+          'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn, this.body, this.id]
         }
       ],
       callback
@@ -110,13 +101,14 @@
           rawData.forEach(function(item) {
             var article = new Article(item); // Instantiate an article based on item from JSON
             // TODO: Cache the newly-instantiated article in the DB: (what can we call on each 'article'?)
-
+            article.insertRecord();
           });
           // Now get ALL the records out the DB, with their database IDs:
           webDB.execute('', function(rows) { // TODO: select our now full table
             // TODO: Now, 1st - instanitate those rows with the .loadAll function,
             // and 2nd - pass control to the view by calling whichever function argument was passed in to fetchAll.
-
+            Article.loadAll(rows);
+            cb();
           });
         });
       }
@@ -152,13 +144,13 @@
           return a.author === author;
         })
         .map(function(a) {
-          return a.body.match(/\b\w+/g).length
+          return a.body.match(/\b\w+/g).length;
         })
         .reduce(function(a, b) {
           return a + b;
         })
-      }
-    })
+      };
+    });
   };
 
   Article.stats = function() {
@@ -167,7 +159,7 @@
       numWords: Article.numwords(),
       Authors: Article.allAuthors(),
     };
-  }
+  };
 
   module.Article = Article;
 })(window);
