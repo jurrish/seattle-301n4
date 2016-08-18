@@ -4,4 +4,4 @@
   // TODO: You will also interact with the map.js file here
 
 
-})(window)
+})(window);
