@@ -71,7 +71,12 @@ page()
 
 ## Final-Project Preview
 
+- projects should use proper MVC separation, SPA architecture with routing, responsive design & SMACSS, data persistence, ajax & templating as appropriate, and must be deployed via Heroku or similar
+- pitches during class 13 & 14
 
+examples:
+[You Are Hungry](https://youarehungry.herokuapp.com/)
+[My Funny Friend and Me](https://myfunnyfriendandme.herokuapp.com/)
 
 ## Helpful Resources
 - What is a Single-Page Application (SPA), with live demo: http://www.johnpapa.net/pageinspa/
