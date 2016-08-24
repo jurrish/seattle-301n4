@@ -7,7 +7,7 @@
   var render = function(article) {
     var template = Handlebars.compile($('#article-template').text());
 
-    article.daysAgo = parseInt((new Date() - new Date(article.publishedOn))/60/60/24/1000);
+    article.daysAgo = parseInt((new Date() - new Date(article.publishedOn)) / 60 / 60 / 24 / 1000);
     article.publishStatus = article.publishedOn ? 'published ' + article.daysAgo + ' days ago' : '(draft)';
     article.body = marked(article.body);
 

@@ -5,7 +5,17 @@
 
   repos.requestRepos = function(callback) {
     // TODO: How would you like to fetch your repos? Don't forget to call the callback.
-
+    $.ajax({
+      url: 'https://api.github.com/user/repos?sort=updated&per_page=10',
+      type: 'GET',
+      headers: {
+        Authorization: 'token ' + githubToken
+      }
+    }).done(function(data){
+      console.log(data);
+      repos.all = data;
+    });
+    callback();
   };
 
   // DONE: Model method that filters the full collection for repos with a particular attribute.
@@ -14,6 +24,7 @@
     return repos.all.filter(function(repo) {
       return repo[attr];
     });
+    console.log(repo);
   };
 
   module.repos = repos;
