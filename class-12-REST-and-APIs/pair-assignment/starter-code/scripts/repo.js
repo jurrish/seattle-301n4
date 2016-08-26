@@ -14,8 +14,8 @@
     }).done(function(data){
       console.log(data);
       repos.all = data;
+      callback();
     });
-    callback();
   };
 
   // DONE: Model method that filters the full collection for repos with a particular attribute.
