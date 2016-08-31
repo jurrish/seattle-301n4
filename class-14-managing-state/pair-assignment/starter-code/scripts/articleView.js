@@ -40,7 +40,7 @@
   };
 
   // COMMENT: What does this method do?  What is it's execution path?
-  //once the section with filters id is changed, event occurs only once. resource is named as a variable that replaces either author-filter or category-filter with an empty string instead of "-filter".  and then, page modifies the url/route to whatever the selected filter item is
+  //once the section with filters id is changed, event occurs only once. resource is named as a variable that replaces either author-filter or category-filter with an empty string instead of "-filter".  and then, page modifies the url/route to whatever the selected filter item is (and removes white space and replaces it with a + sign in the url).
   articleView.handleFilters = function() {
     $('#filters').one('change', 'select', function() {
       resource = this.id.replace('-filter', '');
@@ -127,6 +127,8 @@
   };
 
   // COMMENT: What does this method do?  What is it's execution path?
+
+  //the method .index is a function that takes articles as a parameter.  first, it shows the section with an id of articles, and hides the siblings of that section. Then, it removes any articles that are children of the #articles section. and then, it renders and appends all the article instantiations to the section with an id of articles. then, it populates the filters ad runs handlefilters. it also truncates the article bodies.
   articleView.index = function(articles) {
     $('#articles').show().siblings().hide();
 
@@ -137,6 +139,7 @@
 
     articleView.populateFilters();
     // COMMENT: What does this method do?  What is it's execution path?
+  //see other section where handlefilters is defined. the execution path is started inside this method. but it also runs through the a page function.
     articleView.handleFilters();
 
     // DONE: Replace setTeasers with just the truncation logic, if needed:
