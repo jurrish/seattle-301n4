@@ -13,6 +13,8 @@
   };
 
   // COMMENT: What does this method do?  What is it's execution path?
+
+  //populate filters is a function that declares options as a variable (for later use). Then, template is defined as a handlebar.compile function that creates the option template that we can then populate with options(which is an Article constructor that has a method(allAuthors) that is a mapped array(mapped with a callback that takes author as an argument) sorted by unique authors as values). Then, it passes the array of unique authors into the handlebars template function (if the array runs into duplicates, it prevents duplication by saying the array can only have 1 as its length) and appends the options to the author filter.
   articleView.populateFilters = function() {
     var options,
       template = Handlebars.compile($('#option-template').text());
@@ -38,6 +40,7 @@
   };
 
   // COMMENT: What does this method do?  What is it's execution path?
+  //once the section with filters id is changed, event occurs only once. resource is named as a variable that replaces either author-filter or category-filter with an empty string instead of "-filter".  and then, page modifies the url/route to whatever the selected filter item is
   articleView.handleFilters = function() {
     $('#filters').one('change', 'select', function() {
       resource = this.id.replace('-filter', '');
